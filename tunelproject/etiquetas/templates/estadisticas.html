@@ -1,0 +1,480 @@
+{% extends 'body.html' %}
+{% load static %}
+{% block content %}
+
+<body>
+    <!-- Título principal -->
+    <div class="content-header">
+        <div class="contenedor mb-4">
+            <div class="row">
+                <div class="col-12">
+                    <div class="welcome-section p-4 rounded">
+                        <div class="d-flex align-items-center">
+                            <div class="welcome-icon me-4">
+                                <i class="fas fa-chart-bar fa-3x text-primary"></i>
+                            </div>
+                            <div class="welcome-text">
+                                <h1 class="ml-4">
+                                    Estadísticas de Producción de Túnel Continuo
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="contenedor">
+        <!-- Card para Producción Diaria -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Producción Diaria</h2>
+            </div>
+            <div class="card-body">
+                <div class="fila">
+                    <!-- Filtro de día -->
+                    <div class="filtro">
+                        <label for="fechaFiltro">Seleccionar fecha:</label>
+                        <input type="date" id="fechaFiltro" class="form-control mb-3">
+                        <button onclick="filtrarPorDia()" class="btn-agregar">Filtrar</button>
+                    </div>
+                    <!-- Gráfico para producción diaria -->
+                    <canvas id="graficoDiario"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card para Producción Semanal -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Producción Semanal</h2>
+            </div>
+            <div class="card-body">
+                <div class="fila">
+                    <!-- Filtro de semana -->
+                    <div class="filtro">
+                        <label for="semanaFiltro">Seleccionar semana:</label>
+                        <input type="week" id="semanaFiltro" class="form-control mb-3">
+                        <button onclick="filtrarPorSemana()" class="btn-agregar">Filtrar</button>
+                    </div>
+                    <!-- Gráfico para producción semanal -->
+                    <canvas id="graficoSemanal"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card para Producción Mensual -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Producción Mensual</h2>
+            </div>
+            <div class="card-body">
+                <div class="fila">
+                    <!-- Filtro de mes -->
+                    <div class="filtro">
+                        <label for="mesFiltro">Seleccionar mes:</label>
+                        <input type="month" id="mesFiltro" class="form-control mb-3">
+                        <button onclick="filtrarPorMes()" class="btn-agregar">Filtrar</button>
+                    </div>
+                    <!-- Gráfico para producción mensual -->
+                    <canvas id="graficoMensual"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        Chart.register(ChartDataLabels);
+        
+        document.addEventListener("DOMContentLoaded", function () {
+            const fechas = {{ fechas|safe }};
+            const destinos = {{ destinos|safe }};
+            const datos_destinos = {{ datos_destinos|safe }};
+        
+            const colores = [
+                "rgba(45, 138, 200, 0.5)",  
+                "rgba(235, 99, 132, 0.5)",
+                "rgba(255, 206, 86, 0.5)",  
+                "rgba(75, 192, 192, 0.5)",   
+                "rgba(153, 102, 255, 0.5)",  
+                "rgba(255, 159, 64, 0.5)",  
+                "rgba(54, 162, 235, 0.5)",   
+                "rgba(201, 203, 207, 0.5)", 
+                "rgba(60, 179, 113, 0.5)",  
+                "rgba(220, 20, 60, 0.5)"   
+            ];
+        
+            const ctxDiario = document.getElementById("graficoDiario").getContext("2d");
+            const ctxSemanal = document.getElementById("graficoSemanal").getContext("2d");
+            const ctxMensual = document.getElementById("graficoMensual").getContext("2d");
+        
+            // Opciones comunes para todos los gráficos
+            const opcionesComunes = {
+                responsive: true,
+                scales: { 
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Total Kilos',
+                            font: {
+                                weight: 'bold',
+                                size: 14
+                            },
+                            color: '#000'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Destino Producto',
+                            font: {
+                                weight: 'bold',
+                                size: 14
+                            },
+                            color: '#000'
+                        },
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 0
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            boxWidth: 30,
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.dataset.label + ': ' + tooltipItem.raw.toFixed(2) + ' KG';
+                            }
+                        }
+                    },
+                    datalabels: { 
+                        anchor: 'end',
+                        align: 'top',
+                        padding: -5,
+                        formatter: function(value) {
+                            return value.toFixed(2) + ' KG';
+                        },
+                        font: {
+                            weight: 'bold',
+                            size: 12
+                        },
+                        color: '#000'
+                    }
+                },
+                layout: {
+                    padding: {
+                        right: 10
+                    }
+                }
+            };
+            // Opciones para grafico de mes
+            const opcionesMes = {
+                responsive: true,
+                scales: { 
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Total Kilos',
+                            font: {
+                                weight: 'bold',
+                                size: 14
+                            },
+                            color: '#000'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Destino Producto',
+                            font: {
+                                weight: 'bold',
+                                size: 14
+                            },
+                            color: '#000'
+                        },
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 0
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            boxWidth: 30,
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.dataset.label + ': ' + tooltipItem.raw.toFixed(2) + ' KG';
+                            }
+                        }
+                    },
+                    datalabels: { 
+                        anchor: 'end',
+                        align: 'top',
+                        padding: -5,
+                        formatter: function(value) {
+                            return value.toFixed(2) + ' KG';
+                        },
+                        font: {
+                            weight: 'bold',
+                            size: 9
+                        },
+                        color: '#000'
+                    }
+                },
+                layout: {
+                    padding: {
+                        right: 10
+                    }
+                }
+            };
+            // Opciones para el grafico de Producción Diaria
+            const opcionesDiario = {
+                responsive: true,
+                scales: { 
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Total Kilos',
+                            font: {
+                                weight: 'bold',
+                                size: 14
+                            },
+                            color: '#000'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Destino Producto',
+                            font: {
+                                weight: 'bold',
+                                size: 14
+                            },
+                            color: '#000'
+                        },
+                        ticks: {
+
+                        }
+
+                    },
+                },
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            boxWidth: 30,
+                            padding: 20
+                        }
+                    },
+
+                    tooltip: {
+                        enabled: true,
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.dataset.label + ': ' + tooltipItem.raw.toFixed(2) + ' KG';
+                            }
+                        }
+                    },
+                    datalabels: { 
+                        anchor: 'end',
+                        align: 'top',
+                        padding: -5,
+                        formatter: function(value) {
+                            return value.toFixed(2) + ' KG';
+                        },
+                        font: {
+                            weight: 'bold',
+                            size: 12
+                        },
+                        color: '#000'
+                    }
+                },
+                layout: {
+                    padding: {
+                        right: 10
+                    }
+                }
+            };
+        
+            let chartDiario = new Chart(ctxDiario, {
+                type: "bar",
+                data: { labels: [], datasets: [] },
+                options: opcionesDiario
+            });
+        
+            let chartSemanal = new Chart(ctxSemanal, {
+                type: "bar",
+                data: { labels: [], datasets: [] },
+                options: opcionesComunes
+            });
+
+            let chartMensual = new Chart(ctxMensual, {
+                type: "bar",
+                data: { labels: [], datasets: [] },
+                options: opcionesMes
+            });
+        
+            function actualizarGraficoPorFecha(grafico, fechasSeleccionadas) {
+                if (fechasSeleccionadas.length === 0) {
+                    alert("No hay datos para la selección.");
+                    return;
+                }
+    
+                const destinosFiltrados = destinos.filter(destino => {
+                    return fechasSeleccionadas.some(fecha => {
+                        const valor = datos_destinos[destino][fechas.indexOf(fecha)] || 0;
+                        return valor > 0;
+                    });
+                });
+            
+                if (destinosFiltrados.length === 0) {
+                    alert("No se han producido productos en esta fecha.");
+                    return;
+                }
+            
+                const datasets = destinosFiltrados.map((destino, i) => ({
+                    label: destino,
+                    data: fechasSeleccionadas.map(fecha => datos_destinos[destino][fechas.indexOf(fecha)] || 0),
+                    backgroundColor: colores[i % colores.length],
+                    borderColor: colores[i % colores.length].replace("0.5", "1"),
+                    borderWidth: 1
+                }));
+            
+                grafico.data.labels = fechasSeleccionadas;
+                grafico.data.datasets = datasets;
+                grafico.update();
+            }
+
+
+            function actualizarGraficoPorSuma(grafico, fechas, destinosSumados) {
+                const destinosFiltrados = Object.keys(destinosSumados).filter(destino => destinosSumados[destino] > 0);
+            
+                if (destinosFiltrados.length === 0) {
+                    alert("No se han producido productos en este periodo.");
+                    return;
+                }
+            
+                const datasets = [{
+                    label: "Producción total",
+                    data: destinosFiltrados.map(destino => destinosSumados[destino]),
+                    backgroundColor: destinosFiltrados.map((_, i) => colores[i % colores.length]),
+                    borderColor: destinosFiltrados.map((_, i) => colores[i % colores.length].replace("0.5", "1")),
+                    borderWidth: 1
+                }];
+            
+                grafico.data.labels = destinosFiltrados;
+                grafico.data.datasets = datasets;
+                grafico.update();
+            }
+            
+            window.filtrarPorDia = function () {
+                const fechaSeleccionada = document.getElementById("fechaFiltro").value;
+                if (!fechaSeleccionada || !fechas.includes(fechaSeleccionada)) {
+                    alert("Selecciona una fecha válida");
+                    return;
+                }
+                actualizarGraficoPorFecha(chartDiario, [fechaSeleccionada]);
+            };
+        
+            window.filtrarPorSemana = function () {
+                const semanaSeleccionada = document.getElementById("semanaFiltro").value;
+                if (!semanaSeleccionada) {
+                    alert("Selecciona una semana válida");
+                    return;
+                }
+            
+                const [año, semana] = semanaSeleccionada.split("-W").map(Number);
+                const fechasSemana = fechas.filter(fecha => {
+                    const date = new Date(fecha);
+                    const añoFecha = date.getFullYear();
+                    const semanaFecha = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 2).getISOWeek();
+                    return añoFecha === año && semanaFecha === semana;
+                });
+            
+                if (fechasSemana.length === 0) {
+                    alert("No hay datos para esta semana.");
+                    return;
+                }
+            
+                const destinosSumados = {};
+                destinos.forEach(destino => {
+                    const valoresDestino = fechasSemana.map(fecha => {
+                        return datos_destinos[destino][fechas.indexOf(fecha)] || 0;
+                    });
+            
+                    destinosSumados[destino] = valoresDestino.reduce((acc, curr) => acc + curr, 0);
+                });
+            
+                actualizarGraficoPorSuma(chartSemanal, fechasSemana, destinosSumados);
+            };
+
+            window.filtrarPorMes = function () {
+                const mesSeleccionado = document.getElementById("mesFiltro").value;
+                if (!mesSeleccionado) {
+                    alert("Selecciona un mes válido");
+                    return;
+                }
+            
+                const [año, mes] = mesSeleccionado.split("-").map(Number);
+                const fechaInicio = new Date(año, mes - 1, 0, 1);
+                const fechaFin = new Date(año, mes, 0);
+            
+                const fechasMes = fechas.filter(fecha => {
+                    const date = new Date(fecha);
+                    return date >= fechaInicio && date <= fechaFin;
+                });
+            
+                if (fechasMes.length === 0) {
+                    alert("No hay datos para este mes.");
+                    return;
+                }
+            
+                const destinosSumados = {};
+                destinos.forEach(destino => {
+                    const valoresDestino = fechasMes.map(fecha => {
+                        return datos_destinos[destino][fechas.indexOf(fecha)] || 0;
+                    });
+            
+                    destinosSumados[destino] = valoresDestino.reduce((acc, curr) => acc + curr, 0);
+                });
+            
+                actualizarGraficoPorSuma(chartMensual, fechasMes, destinosSumados);
+            };
+            
+        });
+        
+        // Función para obtener la semana ISO correctamente
+        Date.prototype.getISOWeek = function () {
+            const date = new Date(this.valueOf());
+            const dayNum = (this.getDay() + 6) % 7;
+            date.setDate(date.getDate() - dayNum + 3);
+            const firstThursday = date.valueOf();
+            date.setMonth(0, 1);
+            if (date.getDay() !== 4) {
+                date.setMonth(0, 1 + ((4 - date.getDay() + 7) % 7));
+            }
+            return 1 + Math.ceil((firstThursday - date) / 604800000);
+        };
+    </script>
+</body>
+
+{% endblock %}

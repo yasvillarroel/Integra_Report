@@ -1,0 +1,85 @@
+{% load static %}
+{% comment %} home.html : Contiene el head {% endcomment %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    
+    <title>Tunel Continuo</title>
+
+      <!-- Íconos de Font Awesome -->
+       <link rel="stylesheet" href="{% static 'lib/adminlte-3.0.4/plugins/font-awesome-5.11.1/css/all.min.css' %}">
+
+      <!-- Estilos del tema AdminLTE -->
+      <link rel="stylesheet" href="{% static 'lib/adminlte-3.0.4/css/adminlte.min.css' %}">
+    
+      <!-- Fuente de Google: Source Sans Pro -->
+      <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    
+      <!-- jQuery (librería de manipulación del DOM y AJAX) -->
+      <script src="{% static 'lib/adminlte-3.0.4/plugins/jquery/jquery.min.js' %}"></script>
+    
+      <!-- Bootstrap 4 (incluye Popper.js para funcionalidades como tooltips y dropdowns) -->
+      <script src="{% static 'lib/adminlte-3.0.4/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    
+      <!-- Scripts del tema AdminLTE -->
+      <script src="{% static 'lib/adminlte-3.0.4/js/adminlte.min.js' %}"></script>
+    
+      <!-- ============================================= Librerías para manejar tablas con filtros ==============================================-->
+      <!-- DataTables: Estilos para mejorar la apariencia de las tablas -->
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+      
+      <!-- jQuery (versión externa, ya se incluye anteriormente) -->
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      
+      <!-- DataTables: Funcionalidad para ordenar, filtrar y paginar tablas -->
+      <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    
+      <!-- ============================================= Estilos personalizados ==============================================-->
+      <link rel="stylesheet" href="{% static 'css/styles.css' %}?v=1.0">
+    
+      <!-- ============================================= Librerías para exportación de datos ==============================================-->
+       <!-- XLSX.js: Permite leer y escribir archivos Excel en el navegador -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+        
+      <!-- jsPDF: Permite generar archivos PDF desde el navegador -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+    
+      <!-- Íconos de Bootstrap -->
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    
+      <!-- Bootstrap 5 (versión más reciente, incluye funcionalidades mejoradas) -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+      <!-- ============================================= Librerías para graficos ==============================================-->
+      <!-- Chart.js: Permite crear gráficos interactivos en el navegador -->
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        
+      <!-- Plugin para Chart.js que permite mostrar etiquetas en los datos -->
+      <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    
+      <!-- Decimal.js: Librería para cálculos matemáticos precisos con números decimales -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/decimal.js/10.3.1/decimal.min.js"></script>  
+
+      <!-- Estilos de jQuery UI (interfaz de usuario) -->
+      <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+      <!-- jQuery (librería para manipulación del DOM, eventos y AJAX) -->
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      
+      <!-- jQuery UI (extiende jQuery con widgets y efectos visuales) -->
+      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+      
+      <!-- Traducción del Datepicker de jQuery UI al español -->
+      <script src="https://raw.githubusercontent.com/jquery/jquery-ui/master/ui/i18n/datepicker-es.js"></script>
+
+</head>
+
+<body>
+  {% block body %}
+  {% endblock %}
+</body>
+
+</html>

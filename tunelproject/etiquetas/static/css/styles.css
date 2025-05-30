@@ -1,0 +1,668 @@
+/* ======================================================================= General =========================================================================== */
+h1 {
+    text-align: center;
+}
+
+body {
+    background-color: #f0f2f5; /* Color de fondo */
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+    gap: 20px; /* Esto añade un espacio uniforme entre las cards */
+}
+
+.col {
+    flex: 1 1 calc(33.333% - 10px);
+    padding: 8px;
+    min-width: 200px;
+    box-sizing: border-box;
+}
+
+.main-footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #13192C;
+    padding: 10px;
+    text-align: center;
+}
+
+.profile-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.profile-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid #ddd;
+    background: white;
+    padding: 5px;
+}
+
+.main-header{
+    background-color: #05162E;
+    height: 100px;
+}
+
+.content-header{
+    padding-bottom: 0px;
+    width: 100%;
+
+}
+
+/* ======================================================================= Tablas =========================================================================== */
+
+th {
+    font-size: 12px;
+    text-align: center;
+}
+
+td {
+    font-size: 12px;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 8px;
+}
+
+/* ======================================================================= Cards =========================================================================== */
+.card {
+    border-radius: 15px;
+}
+
+.card-header {
+    display: flex;
+    justify-content: center;
+    background-color: #0f316c;
+}
+
+.card-title{
+    font-size: 20px;
+    font-size: 30px;
+}
+
+.card-body {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    min-height: 450px; /* Ajusta la altura si es necesario */
+}
+
+.custom-card-width {
+    width: calc(50% - 1rem);  /* Toma la mitad del espacio menos un margen */
+    margin: 0 0.5rem;  /* Añade un pequeño margen a los lados */
+    flex: 1; /* Esto hace que ambas columnas ocupen el mismo espacio */
+    min-width: 0; /* Esto previene que las cards se desborden */
+    flex-grow: 1;
+}
+
+/* ======================================================================= Cards =========================================================================== */
+
+button[type="submit"] {
+    display: block;
+    margin: 5px auto 0;
+    padding: 5px 30px;
+    font-size: 17px;
+    background-color: #FF5300;
+    color: white;
+    border: 2px solid transparent; /* Inicialmente sin borde visible */
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 
+        border 0.3s ease, 
+        box-shadow 0.3s ease, 
+        transform 0.3s ease; /* Se añade la transición de movimiento */
+}
+
+button[type="submit"]:hover {
+    border: 2px solid #ff9a67; /* Color fluorescente */
+    box-shadow: 0 5px 10px #ffb590; /* Efecto glow */
+    color: white;
+    transform: translateY(-5px); /* Eleva el botón 5px */
+}
+
+.btn-editar{
+    display: block;
+    margin: 5px auto 0;
+    padding: 5px 30px;
+    font-size: 17px;
+    background-color: #0F3575;
+    color: white;
+    border: 2px solid transparent; /* Inicialmente sin borde visible */
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 
+        border 0.3s ease, 
+        box-shadow 0.3s ease, 
+        transform 0.3s ease; /* Se añade la transición de movimiento */
+}
+
+.btn-editar:hover {
+    border: 2px solid #124194; /* Color fluorescente */
+    box-shadow: 0 5px 10px #0f316c; /* Efecto glow */
+    color: white;
+    transform: translateY(-5px); /* Eleva el botón 5px */
+}
+
+.btn-agregar{
+    display: block;
+    margin: 5px auto 0;
+    padding: 5px 30px;
+    font-size: 17px;
+    background-color: #FF5300;
+    color: white;
+    border: 2px solid transparent; /* Inicialmente sin borde visible */
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 
+        border 0.3s ease, 
+        box-shadow 0.3s ease, 
+        transform 0.3s ease; /* Se añade la transición de movimiento */
+}
+
+.btn-agregar:hover {
+    border: 2px solid #ff9a67; /* Color fluorescente */
+    box-shadow: 0 5px 10px #ffb590; /* Efecto glow */
+    color: white;
+    transform: translateY(-5px); /* Eleva el botón 5px */
+}
+
+.btn-primary {
+    background-color: #FF5300;
+    border: none;
+    font-weight: bold;
+}
+
+.btn-primary:hover {
+    background-color: #ff6a20;
+}
+
+.btn-limpiar{
+    display: block;
+    margin: 5px auto 0;
+    padding: 5px 30px;
+    font-size: 17px;
+    background-color: #E3001B;
+    color: white;
+    border: 2px solid transparent; /* Inicialmente sin borde visible */
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 
+        border 0.3s ease, 
+        box-shadow 0.3s ease, 
+        transform 0.3s ease; /* Se añade la transición de movimiento */
+}
+
+.btn-limpiar:hover {
+    border: 2px solid #ff3f56; /* Color fluorescente */
+    box-shadow: 0 5px 10px #ff3149; /* Efecto glow */
+    color: white;
+    transform: translateY(-5px); /* Eleva el botón 5px */
+}
+
+.btn-excel{
+    display: block;
+    margin: 5px auto 0;
+    padding: 5px 30px;
+    font-size: 17px;
+    background-color: #0C7238;
+    color: white;
+    border: 2px solid transparent; /* Inicialmente sin borde visible */
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 
+        border 0.3s ease, 
+        box-shadow 0.3s ease, 
+        transform 0.3s ease; /* Se añade la transición de movimiento */
+}
+
+.btn-excel:hover {
+    border: 2px solid #129652; /* Color fluorescente */
+    box-shadow: 0 5px 10px #29C27F; /* Efecto glow */
+    color: white;
+    transform: translateY(-5px); /* Eleva el botón 5px */
+}
+
+.btn-pdf{
+    display: block;
+    margin: 5px auto 0;
+    padding: 5px 30px;
+    font-size: 17px;
+    background-color: #B51308;
+    color: white;
+    border: 2px solid transparent; /* Inicialmente sin borde visible */
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 
+        border 0.3s ease, 
+        box-shadow 0.3s ease, 
+        transform 0.3s ease; /* Se añade la transición de movimiento */
+}
+
+.btn-pdf:hover {
+    border: 2px solid #db1f12; /* Color fluorescente */
+    box-shadow: 0 5px 10px #cd1a0d; /* Efecto glow */
+    color: white;
+    transform: translateY(-5px); /* Eleva el botón 5px */
+}
+
+.btn-filtrar:disabled {
+    opacity: 0.5; /* Hace que el botón se vea más claro */
+    cursor: not-allowed; /* Cambia el cursor a "no permitido" */
+}
+
+/* ======================================================================= Nabvar =========================================================================== */
+
+.navbar-nav .nav-link {
+    color: white !important;
+    text-decoration: none;
+    position: relative;
+    padding-bottom: 5px; /* Espacio entre el texto y la línea */
+    transition: color 0.3s ease-in-out; /* Agrega transición para suavizar el cambio de color */
+}
+
+.navbar-nav .nav-link:hover {
+    color: #FF5300 !important; /* Cambia el color del texto al pasar el mouse */
+}
+
+.navbar-nav .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0%;
+    height: 2px;
+    background-color: #FF5300; /* Color de la línea */
+    transition: width 0.3s ease-in-out;
+}
+
+.navbar-nav .nav-link:hover::after {
+    width: 100%; /* La línea se extiende completamente */
+}
+
+/* ======================================================================= Contenedores =========================================================================== */
+
+.container {
+    width: 80%; /* o cualquier otro valor adecuado */
+    max-width: 1200px; /* o el valor máximo que prefieras */
+    margin: 0 auto; /* Esto centra el contenedor horizontalmente */
+    padding: 20px; /* Espaciado interno, ajusta según lo necesites */
+}
+
+.container-fluid{
+    margin-bottom: 5px;
+}
+  
+.contenedor {
+    width: 100%;  /* Cambiamos a 100% para alinear con el header */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px; /* Añadimos padding lateral para mantener consistencia */
+}
+
+/* ======================================================================= ui-datepicker =========================================================================== */
+
+.ui-datepicker table {
+    margin: 0 auto;
+}
+
+/* Mejora el aspecto de los días */
+.ui-datepicker td span, .ui-datepicker td a {
+    padding: 0.5em;
+    text-align: center;
+}
+
+/* Estilo para el header del calendario */
+.ui-datepicker-header {
+    background-color: #007bff !important;
+    color: white !important;
+    border: none !important;
+}
+
+/* Estilo para los botones de navegación */
+.ui-datepicker .ui-datepicker-prev, 
+.ui-datepicker .ui-datepicker-next {
+    background: transparent !important;
+    cursor: pointer;
+}
+
+.ui-datepicker {
+    font-size: 1.2em; /* Aumenta el tamaño del texto */
+    width: 350px; /* Aumenta el tamaño total del calendario */
+}
+
+.ui-datepicker td {
+    padding: 10px; /* Hace las celdas más grandes */
+}
+
+.ui-datepicker-header {
+    font-size: 1.3em; /* Aumenta el tamaño del encabezado */
+}
+
+.calendario-grande .ui-datepicker {
+    font-size: 1.1rem;
+    width: 500px; /* Ajusta el tamaño según necesites */
+    height: auto;
+}
+
+.ui-datepicker {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 300px;
+}
+
+#calendar {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 300px;
+}
+
+/* ======================================================== Diseño Responsivo para dispostivos móviles ============================================================= */
+
+@media (max-width: 768px) {
+    /* Asegura que el navbar se mantenga fijo en la parte superior */
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1050;
+        background-color:#05162E; /* Fondo oscuro */    }
+
+    /* Hace que el contenido no quede tapado cuando el menú se expanda */
+    .navbar-collapse {
+        position: absolute;
+        top: 100%; /* Justo debajo del navbar */
+        left: 0;
+        width: 100%;
+        background-color: #081f3f; /* Asegura que tenga fondo */
+        padding: 10px;
+    }
+
+    /* Empuja el contenido hacia abajo cuando el menú se expande */
+    .navbar-collapse.show + .content {
+        margin-top: 250px; /* Ajusta este valor según el tamaño del menú */
+    }
+
+    /* Hace los enlaces visibles */
+    .navbar-nav .nav-link {
+        color: white !important;
+    }
+
+    /* Asegura que los elementos dentro del navbar se expandan correctamente */
+    .navbar-nav {
+        width: 100%;
+    }
+
+    .navbar-nav .nav-item {
+        width: 100%;
+        text-align: center;
+    }
+
+    .navbar-toggler {
+        border-color: white; /* Borde blanco */
+    }
+
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255, 255, 255, 0.8)' stroke-width='3' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    }
+
+    body {
+        margin-top: 80px; /* Ajusta el valor según el tamaño del navbar */
+    }
+
+    .contenedor {
+        padding: 10px;
+    }
+
+    .card {
+        width: 100%;
+    }
+
+    .calendario-grande {
+        width: 100%;
+        height: auto;
+    }
+
+    canvas {
+        max-height: 250px !important;
+    }
+
+    .custom-card-width {
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+}
+
+
+.content-wrapper {
+    background-color: #f4f6f9;  /* Color estándar de AdminLTE */
+    min-height: 100vh; /* Evita que el contenido se corte en pantallas pequeñas */
+    padding-bottom: 20px;
+}
+
+.welcome-section {
+    background-color: #ffffff;
+    border-left: 4px solid #007bff;
+    box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+    padding: 2rem;
+}
+
+.welcome-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+.content-header {
+    background-color: transparent;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .welcome-section {
+        padding: 1.5rem !important;
+        text-align: center;
+    }
+
+    .welcome-icon {
+        width: 50px;
+        height: 50px;
+        margin: 0 auto;
+    }
+
+    .welcome-text h1 {
+        font-size: 1.5rem;
+        margin-left: 0 !important;
+        text-align: center;
+    }
+
+    .welcome-text p {
+        font-size: 0.9rem;
+    }
+
+    .d-flex.align-items-center {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .content {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .welcome-text h1 {
+        font-size: 1.3rem;
+    }
+
+    .welcome-icon i {
+        font-size: 2.5rem;
+    }
+
+    .content {
+        padding: 5px;
+    }
+}
+
+
+.titulo-principal {
+    background-color: #ffffff;
+    border-left: 4px solid #007bff;
+    box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+    color: black;
+    text-align: center;
+    padding: 15px;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    margin-right: 10px;
+    color: #007bff;
+}
+
+/* Contenedor principal */
+.contenedor {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 0px 20px 20px 20px;
+}
+
+/* Estilo de las tarjetas */
+.card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.card-header {
+    background-color: #0f316c;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+/* Fila de los elementos */
+.fila {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* Estilo del filtro */
+.filtro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 400px;
+    background-color: #f1f3f4;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin: auto;
+}
+
+/* Canvas para los gráficos */
+canvas {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+h2 {
+    margin: 0px;
+}
+
+/* Sección de bienvenida */
+.welcome-section {
+    background-color: #ffffff;
+    border-left: 4px solid #007bff;
+    box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+}
+
+/* Estilos responsivos para dispositivos pequeños */
+@media (max-width: 768px) {
+    /* Ajustar el tamaño de las tarjetas */
+    .card {
+        margin: 10px;
+    }
+
+    .filtro {
+        width: 100%;
+        padding: 15px;
+    }
+
+    /* Asegurarse de que los elementos en la fila se apilen en pantallas pequeñas */
+    .fila {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    /* Asegurar que el título de las tarjetas sea legible en pantallas pequeñas */
+    .card-header h2 {
+        font-size: 1.2rem;
+    }
+
+    /* Ajustar el tamaño de los inputs y botones */
+    .form-control {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    .btn-agregar {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .titulo-principal {
+        font-size: 1.5rem;
+        padding: 10px;
+    }
+
+    .card-header {
+        font-size: 1.2rem;
+    }
+
+    .filtro {
+        width: 90%;
+    }
+
+    .btn-agregar {
+        font-size: 12px;
+    }
+}

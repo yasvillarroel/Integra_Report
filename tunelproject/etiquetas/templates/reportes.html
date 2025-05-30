@@ -1,0 +1,289 @@
+{% extends 'body.html' %}
+{% load static %}
+{% block content %}
+<section class="content">
+    <div class="content-header">
+        <div class="contenedor mb-5">
+            <div class="row">
+                <div class="col-12">
+                    <div class="welcome-section p-4 rounded">
+                        <div class="d-flex align-items-center">
+                            <div class="welcome-icon me-4">
+                                <i class="fas fa-file-alt fa-3x text-primary"></i>
+                            </div>
+                            <div class="welcome-text">
+                                <h1 class="ml-4"> Reportabilidad Túnel Continuo </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="contenedor">
+        <div class="card card-custom">
+
+          <div class="card-header text-white">
+            <h3 class="card-title mx-auto">Etiquetas Salida Tunel Continuo</h3>
+          </div>
+
+            <div class="card-body">
+                <div id="jsGrid1"></div>
+                <div class="table-responsive">
+                    <form id="filtro-form" class="mb-3" method="GET">
+                        <div class="d-flex flex-wrap justify-content-between">
+                            <!-- Filtro por Día Proceso -->
+                            <div class="col">
+                                <input type="date" name="fecha" id="filtro-fecha" class="form-control" value="{{ request.GET.fecha|default:'' }}">
+                            </div>
+
+                            <!-- Filtro por Lote -->
+                            <div class="col">
+                                <input type="text" name="lote" id="filtro-lote" class="form-control"  value="{{ request.GET.lote|default:'' }}" placeholder="Filtrar por Lote">
+                            </div>
+
+                            <!-- Filtro por Corte -->
+                            <div class="col">
+                                <select name="corte" id="filtro-corte" class="form-control">
+                                    <option value="">Seleccionar Corte</option>
+                                    <option value="PORCION S/PIEL" {% if request.GET.corte == "PORCION S/PIEL" %}selected{% endif %}>PORCION S/PIEL</option>
+                                    <option value="PORCION C/PIEL" {% if request.GET.corte == "PORCION C/PIEL" %}selected{% endif %}>PORCION C/PIEL</option>
+                                    <option value="PORCION C/PIEL SWEET THAI CHILI BUTTER" {% if request.GET.corte == "PORCION C/PIEL SWEET THAI CHILI BUTTER" %}selected{% endif %}>PORCION C/PIEL SWEET THAI CHILI BUTTER</option>
+                                    <option value="PORCION C/PIEL BLACKENED" {% if request.GET.corte == "PORCION C/PIEL BLACKENED" %}selected{% endif %}>PORCION C/PIEL BLACKENED</option>
+                                    <option value="PORCION S/PIEL INY. KEEPFRESH" {% if request.GET.corte == "PORCION S/PIEL INY. KEEPFRESH" %}selected{% endif %}>PORCION S/PIEL INY. KEEPFRESH</option>
+                                    <option value="PORCION S/PIEL INY. AGUA/SAL" {% if request.GET.corte == "PORCION S/PIEL INY. AGUA/SAL" %}selected{% endif %}>PORCION S/PIEL INY. AGUA/SAL</option>
+                                    <option value="PORCION C/PIEL TERIYAKI" {% if request.GET.corte == "PORCION C/PIEL TERIYAKI" %}selected{% endif %}>PORCION C/PIEL TERIYAKI</option>
+                                    <option value="PORCION C/PIEL INY. KEEPFRESH" {% if request.GET.corte == "PORCION C/PIEL INY. KEEPFRESH" %}selected{% endif %}>PORCION C/PIEL INY. KEEPFRESH</option>
+                                </select>
+                            </div>
+
+                            <!-- Filtro por Area -->
+                            <div class="col">
+                                <select name="area" id="filtro-area" class="form-control">
+                                    <option value="">Seleccionar Área</option>
+                                    <option value="LINEA 1 DIA" {% if request.GET.area == "LINEA 1 DIA" %}selected{% endif %}>LINEA 1 DIA</option>
+                                    <option value="LINEA 1 NOCHE" {% if request.GET.area == "LINEA 1 NOCHE" %}selected{% endif %}>LINEA 1 NOCHE</option>
+                                    <option value="LINEA 2" {% if request.GET.area == "LINEA 2" %}selected{% endif %}>LINEA 2</option>
+                                    <option value="LINEA 2 NOCHE" {% if request.GET.area == "LINEA 2 NOCHE" %}selected{% endif %}>LINEA 2 NOCHE</option>
+                                </select>
+                            </div>
+
+                            <!-- Filtro por Destino Producto -->
+                            <div class="col">
+                                <select name="destino_producto" id="filtro-destino_producto" class="form-control">
+                                    <option value="">Seleccionar Destino Producto</option>
+                                    <option value="X EMPACAR P/MEMBERS" {% if request.GET.destino_producto == "X EMPACAR P/MEMBERS" %}selected{% endif %}>X EMPACAR P/MEMBERS</option>
+                                    <option value="X EMPACAR P/S.THAI.CH.BUTTER" {% if request.GET.destino_producto == "X EMPACAR P/S.THAI.CH.BUTTER" %}selected{% endif %}>X EMPACAR P/S.THAI.CH.BUTTER</option>
+                                    <option value="X EMPACAR P/ESTUCHE BAP INY. (B)" {% if request.GET.destino_producto == "X EMPACAR P/ESTUCHE BAP INY. (B)" %}selected{% endif %}>X EMPACAR P/ESTUCHE BAP INY. (B)</option>
+                                    <option value="X EMPACAR P/CENTRO S.THAI.CH.BUTTER" {% if request.GET.destino_producto == "X EMPACAR P/CENTRO S.THAI.CH.BUTTER" %}selected{% endif %}>X EMPACAR P/CENTRO S.THAI.CH.BUTTER</option>
+                                    <option value="X EMPACAR P/ HLF FPI INY." {% if request.GET.destino_producto == "X EMPACAR P/ HLF FPI INY." %}selected{% endif %}>X EMPACAR P/ HLF FPI INY.</option>
+                                    <option value="X EMPACAR P/ OCEAN HORIZONS" {% if request.GET.destino_producto == "X EMPACAR P/ OCEAN HORIZONS" %}selected{% endif %}>X EMPACAR P/ OCEAN HORIZONS</option>
+                                    <option value="X EMPACAR P/ WORLD DOCK (#)" {% if request.GET.destino_producto == "X EMPACAR P/ WORLD DOCK (#)" %}selected{% endif %}>X EMPACAR P/ WORLD DOCK (#)</option>
+                                    <option value="X EMPACAR P/ HLF HFS FULL GRASA" {% if request.GET.destino_producto == "X EMPACAR P/ HLF HFS FULL GRASA" %}selected{% endif %}>X EMPACAR P/ HLF HFS FULL GRASA</option>
+                                    <option value="X EMPACAR P/AMAZON" {% if request.GET.destino_producto == "X EMPACAR P/AMAZON" %}selected{% endif %}>X EMPACAR P/AMAZON</option>
+                                    <option value="X EMPACAR P/ESTUCHE BAP INY. (T)" {% if request.GET.destino_producto == "X EMPACAR P/ESTUCHE BAP INY. (T)" %}selected{% endif %}>X EMPACAR P/ESTUCHE BAP INY. (T)</option>
+                                    <option value="X EMPACAR P/COLLAR S.THAI.CH.BUTTER" {% if request.GET.destino_producto == "X EMPACAR P/COLLAR S.THAI.CH.BUTTER" %}selected{% endif %}>X EMPACAR P/COLLAR S.THAI.CH.BUTTER</option>
+                                    <option value="X EMPACAR P/MUESTRA MEMBERS" {% if request.GET.destino_producto == "X EMPACAR P/MUESTRA MEMBERS" %}selected{% endif %}>X EMPACAR P/MUESTRA MEMBERS</option>
+                                    <option value="X EMPACAR P/ ESTUCHES BAP" {% if request.GET.destino_producto == "X EMPACAR P/ ESTUCHES BAP" %}selected{% endif %}>X EMPACAR P/ ESTUCHES BAP</option>
+                                </select>
+                            </div>
+
+                            <!-- Filtro por Calidad -->
+                            <div class="col">
+                                <select name="calidad" id="filtro-calidad" class="form-control">
+                                    <option value="">Seleccionar Calidad</option>
+                                    <option value="INDUSTRIAL A" {% if request.GET.calidad == "INDUSTRIAL A" %}selected{% endif %}>INDUSTRIAL A</option>
+                                    <option value="STANDARD" {% if request.GET.calidad == "STANDARD" %}selected{% endif %}>STANDARD</option>
+                                    <option value="INDUSTRIAL" {% if request.GET.calidad == "INDUSTRIAL" %}selected{% endif %}>INDUSTRIAL</option>
+                                    <option value="GRADO" {% if request.GET.calidad == "GRADO" %}selected{% endif %}>GRADO</option>
+                                    <option value="PREMIUM" {% if request.GET.calidad == "PREMIUM" %}selected{% endif %}>PREMIUM</option>
+                                    <option value="GRADO 1" {% if request.GET.calidad == "GRADO 1" %}selected{% endif %}>GRADO 1</option>
+                                </select>
+                            </div>
+
+                            <!-- Filtro por Hora Intervalo -->
+                            <div class="col">
+                                <select name="hora_intervalo" id="filtro-hora_intervalo" class="form-control">
+                                    <option value="">Seleccionar Hora Intervalo</option>
+                                    <option value="00-01 hrs" {% if request.GET.hora_intervalo == "00-01 hrs" %}selected{% endif %}>00-01 hrs</option>
+                                    <option value="01-02 hrs" {% if request.GET.hora_intervalo == "01-02 hrs" %}selected{% endif %}>01-02 hrs</option>
+                                    <option value="02-03 hrs" {% if request.GET.hora_intervalo == "02-03 hrs" %}selected{% endif %}>02-03 hrs</option>
+                                    <option value="03-04 hrs" {% if request.GET.hora_intervalo == "03-04 hrs" %}selected{% endif %}>03-04 hrs</option>
+                                    <option value="04-05 hrs" {% if request.GET.hora_intervalo == "04-05 hrs" %}selected{% endif %}>04-05 hrs</option>
+                                    <option value="05-06 hrs" {% if request.GET.hora_intervalo == "05-06 hrs" %}selected{% endif %}>05-06 hrs</option>
+                                    <option value="08-09 hrs" {% if request.GET.hora_intervalo == "08-09 hrs" %}selected{% endif %}>08-09 hrs</option>
+                                    <option value="09-10 hrs" {% if request.GET.hora_intervalo == "09-10 hrs" %}selected{% endif %}>09-10 hrs</option>
+                                    <option value="10-11 hrs" {% if request.GET.hora_intervalo == "10-11 hrs" %}selected{% endif %}>10-11 hrs</option>
+                                    <option value="11-12 hrs" {% if request.GET.hora_intervalo == "11-12 hrs" %}selected{% endif %}>11-12 hrs</option>
+                                    <option value="12-13 hrs" {% if request.GET.hora_intervalo == "12-13 hrs" %}selected{% endif %}>12-13 hrs</option>
+                                    <option value="13-14 hrs" {% if request.GET.hora_intervalo == "13-14 hrs" %}selected{% endif %}>13-14 hrs</option>
+                                    <option value="14-15 hrs" {% if request.GET.hora_intervalo == "14-15 hrs" %}selected{% endif %}>14-15 hrs</option>
+                                    <option value="15-16 hrs" {% if request.GET.hora_intervalo == "15-16 hrs" %}selected{% endif %}>15-16 hrs</option>
+                                    <option value="16-17 hrs" {% if request.GET.hora_intervalo == "16-17 hrs" %}selected{% endif %}>16-17 hrs</option>
+                                    <option value="21-22 hrs" {% if request.GET.hora_intervalo == "21-22 hrs" %}selected{% endif %}>21-22 hrs</option>
+                                    <option value="22-23 hrs" {% if request.GET.hora_intervalo == "22-23 hrs" %}selected{% endif %}>22-23 hrs</option>
+                                    <option value="23-24 hrs" {% if request.GET.hora_intervalo == "23-24 hrs" %}selected{% endif %}>23-24 hrs</option>
+                                </select>
+                            </div>
+
+                            <!-- Filtro por Turno -->
+                            <div class="col">
+                                <select name="turno" id="filtro-turno" class="form-control">
+                                    <option value="">Seleccionar Turno</option>
+                                    <option value="Dia" {% if request.GET.turno == "Dia" %}selected{% endif %}>Dia</option>
+                                    <option value="Noche" {% if request.GET.turno == "Noche" %}selected{% endif %}>Noche</option>
+                                </select>
+                            </div>
+
+                            <!-- Filtro por Mes Proceso -->
+                            <div class="col">
+                                <select name="mes_proceso" id="filtro-mes_proceso" class="form-control">
+                                    <option value="">Seleccionar Mes Proceso</option>
+                                    <option value="1" {% if request.GET.mes_proceso == "1" %}selected{% endif %}>1</option>
+                                    <option value="2" {% if request.GET.mes_proceso == "2" %}selected{% endif %}>2</option>
+                                </select>
+                            </div>
+
+                        <div class="container">
+                            <div class="row d-flex justify-content-center gap-2">
+                                <div class="col-12 col-md-auto">
+                                    <button type="submit" class="btn w-100 w-md-auto">FILTRAR</button>
+                                </div>
+                        
+                                <div class="col-12 col-md-auto">
+                                    <a href="{% url 'reportes' %}" class="btn-limpiar w-100 w-md-auto">LIMPIAR FILTROS</a>
+                                </div>
+                        
+                                <div class="col-12 col-md-auto">
+                                    <a href="{% url 'export_to_excel' %}?lote={{ request.GET.lote }}&fecha={{ request.GET.fecha }}&corte={{ request.GET.corte }}&area={{ request.GET.area }}&destino_producto={{ request.GET.destino_producto }}&calidad={{ request.GET.calidad }}&hora_intervalo={{ request.GET.hora_intervalo }}&turno={{ request.GET.turno }}&mes_proceso={{ request.GET.mes_proceso }}" 
+                                    class="btn-excel w-100 w-md-auto">
+                                        Exportar a Excel <i class="fas fa-file-excel"></i>
+                                    </a>
+                                </div>
+                        
+                                <div class="col-12 col-md-auto">
+                                    <a href="{% url 'export_to_pdf' %}?lote={{ request.GET.lote }}&fecha={{ request.GET.fecha }}&corte={{ request.GET.corte }}&area={{ request.GET.area }}&destino_producto={{ request.GET.destino_producto }}&calidad={{ request.GET.calidad }}&hora_intervalo={{ request.GET.hora_intervalo }}&turno={{ request.GET.turno }}&mes_proceso={{ request.GET.mes_proceso }}" 
+                                    class="btn-pdf w-100 w-md-auto">
+                                        Exportar a PDF <i class="fas fa-file-pdf"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                <table id="tabla-etiquetas" class="table table-bordered table-striped mt-2">
+                    <thead>
+                        <tr>
+                            <th scope="col">Dia Proceso</th>
+                            <th scope="col">CodigoBarra</th>
+                            <th scope="col">Lote</th>
+                            <th scope="col">Área</th>
+                            <th scope="col">Destino Producto</th>
+                            <th scope="col">Total Kilos</th>
+                            <th scope="col">Total Bandejas</th>
+                            <th scope="col">Corte</th>
+                            <th scope="col">Calidad</th>
+                            <th scope="col">Conservación</th>
+                            <th scope="col">Hora Proceso</th>
+                            <th scope="col">Hora Intervalo</th>
+                            <th scope="col">Turno</th>
+                            <th scope="col">Mes Proceso</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for etiqueta in etiquetas %}
+                        <tr>
+                            <td>{{ etiqueta.DiaProceso2|date:"d-m-Y" }}</td>
+                            <td>{{ etiqueta.CodigoBarra }}</td>
+                            <td>{{ etiqueta.Lote }}</td>
+                            <td>{{ etiqueta.Area }}</td>
+                            <td>{{ etiqueta.DestinoProducto }}</td>
+                            <td>{{ etiqueta.TotalKilos }} KG</td>
+                            <td>{{ etiqueta.TotalBandejas }} UNIDADES</td>
+                            <td>{{ etiqueta.Corte }}</td>
+                            <td>{{ etiqueta.Calidad }}</td>
+                            <td>{{ etiqueta.Conservacion }}</td>
+                            <td>{{ etiqueta.HoraProceso }}</td>
+                            <td>{{ etiqueta.HoraIntervalo }}</td>
+                            <td>{{ etiqueta.Turno }}</td>
+                            <td>{{ etiqueta.MesProceso }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5"><strong>Total</strong></td>
+                            <td>{{ total_kilos }} KG</td>
+                            <td>{{ total_bandejas }} UNIDADES</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("btn-filtrar").addEventListener("click", function () {
+      let filtroLote = document.getElementById("filtro-lote").value.trim().toLowerCase();
+      let filtroFecha = document.getElementById("filtro-fecha").value.trim(); // YYYY-MM-DD
+      let filtroCorte = document.getElementById("filtro-corte").value.trim().toLowerCase();
+
+      let filas = document.querySelectorAll("#tabla-etiquetas tbody tr");
+
+      filas.forEach(fila => {
+        if (fila.children.length > 9) { // Verificar que la fila tiene suficientes columnas
+          let lote = fila.children[2].textContent.trim().toLowerCase();
+          let fechaProduccion = fila.children[9].textContent.trim(); // d-m-Y
+          let corte = fila.children[6].textContent.trim().toLowerCase();
+
+          // Convertir fecha de 'd-m-Y' a 'YYYY-MM-DD'
+          let partesFecha = fechaProduccion.split("-");
+          let fechaConvertida = partesFecha.length === 3 ? `${partesFecha[2]}-${partesFecha[1]}-${partesFecha[0]}` : "";
+
+          console.log(`Lote: ${lote}, Corte: ${corte}, Fecha Producción: ${fechaProduccion}, Convertida: ${fechaConvertida}`);
+
+          // Lógica de filtrado
+          let mostrar = true;
+          if (filtroLote && !lote.includes(filtroLote)) mostrar = false;
+          if (filtroFecha && fechaConvertida !== filtroFecha) mostrar = false;
+          if (filtroCorte && !corte.includes(filtroCorte)) mostrar = false;
+
+          // Mostrar u ocultar la fila
+          fila.style.display = mostrar ? "" : "none";
+        }
+      });
+    });
+
+    // Actualizar enlaces de exportación con los filtros aplicados
+    function actualizarEnlacesExportacion() {
+      let params = new URLSearchParams();
+      params.append('lote', document.getElementById("filtro-lote").value.trim().toLowerCase());
+      params.append('fecha', document.getElementById("filtro-fecha").value.trim());
+      params.append('corte', document.getElementById("filtro-corte").value.trim().toLowerCase());
+      params.append('area', document.getElementById("filtro-area").value.trim().toLowerCase());
+      params.append('destino_producto', document.getElementById("filtro-destino_producto").value.trim().toLowerCase());
+      params.append('calidad', document.getElementById("filtro-calidad").value.trim().toLowerCase());
+      params.append('hora_intervalo', document.getElementById("filtro-hora_intervalo").value.trim().toLowerCase());
+      params.append('turno', document.getElementById("filtro-turno").value.trim().toLowerCase());
+      params.append('mes_proceso', document.getElementById("filtro-mes_proceso").value.trim().toLowerCase());
+
+      document.getElementById("exportar-excel").href = "{% url 'export_to_excel' %}?" + params.toString();
+      document.getElementById("exportar-pdf").href = "{% url 'export_to_pdf' %}?" + params.toString();
+    }
+
+    // Llamar a la función para actualizar los enlaces de exportación al cargar la página
+    actualizarEnlacesExportacion();
+
+    // Llamar a la función para actualizar los enlaces de exportación al cambiar los filtros
+    document.querySelectorAll("#filtro-form input, #filtro-form select").forEach(element => {
+      element.addEventListener("change", actualizarEnlacesExportacion);
+    });
+  });
+
+</script>
+{% endblock %}

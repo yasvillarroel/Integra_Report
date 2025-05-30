@@ -18,6 +18,14 @@
 
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item"> <a href="/index" class="nav-link text-nowrap"><i class="fas fa-home"></i> Inicio</a></li>
+                {% if request.user.is_superuser or es_admin_personalizado %}
+                    <li class="nav-item">
+                        <a href="{% url 'cargar_archivo' %}" class="nav-link">
+                            <i class="fas fa-upload me-2"></i> Cargar Archivo
+                        </a>
+                    </li>
+                {% endif %}
+
                 <li class="nav-item"> <a href="/reportes" class="nav-link text-nowrap"><i class="fas fa-folder"></i> Reportes</a></li>
                 <li class="nav-item"> <a href="/estadisticas" class="nav-link text-nowrap"><i class="fas fa-chart-bar"></i> Estadísticas</a></li>
                 <!-- Sólo para usuarios Administradores -->

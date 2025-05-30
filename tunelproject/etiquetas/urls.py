@@ -1,5 +1,5 @@
 from django.urls import path # Importa la función path
-from .views import agregar_usuario, editar_usuario, eliminar_usuario, etiquetas, graficos_view, index, login_view, logout_view, export_to_excel, export_to_pdf, estadisticas_view, reportes_view, perfil_view, contraseña_view, usuarios_view # Importa las vistas de la aplicación
+from .views import agregar_usuario, cargar_archivo_view, editar_usuario, eliminar_usuario, etiquetas, graficos_view, index, login_view, logout_view, export_to_excel, export_to_pdf, estadisticas_view, reportes_view, perfil_view, contraseña_view, usuarios_view # Importa las vistas de la aplicación
 from django.contrib.auth import views as auth_views # Para cambiar contraseña
 
 urlpatterns = [
@@ -30,4 +30,5 @@ urlpatterns = [
     # Pruebas gráficos
     path('graficos/', graficos_view, name='graficos'),
 
+    path('cargar-archivo/', cargar_archivo_view, name='cargar_archivo'),
 ]

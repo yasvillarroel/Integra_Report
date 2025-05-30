@@ -1,0 +1,48 @@
+{% extends 'body.html' %}
+{% load static %}
+{% block content %}
+
+<div class="contenedor mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h3 class="text-center mb-4">Subir Archivo Excel</h3>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST" enctype="multipart/form-data" class="border p-4 rounded shadow-sm bg-light">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="archivo_excel" class="form-label">Selecciona un archivo .xlsx:</label>
+                    <input type="file" class="form-control" name="archivo_excel" id="archivo_excel" accept=".xlsx" required>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-success">Cargar</button>
+                </div>
+            </form>
+
+            <hr class="my-4">
+
+            <h5 class="text-center">Últimos archivos cargados</h5>
+            <ul class="list-group mt-2">
+                {% for a in archivos %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>{{ a.nombre_archivo }}</strong><br>
+                            <small>Subido por: {{ a.id_user.nombre_user }} {{ a.id_user.apellido_user }}</small>
+                        </div>
+                        <small class="text-muted">{{ a.fecha_subida|date:"d M Y H:i" }}</small>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">No hay archivos registrados.</li>
+                {% endfor %}
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,12 +1,13 @@
 from datetime import datetime # para trabajar con fechas y horas.
 from io import BytesIO # para manejar datos binarios en memoria como si fueran un archivo.
+from django.utils import timezone # para trabajar con zonas horarias y obtener la hora actual.
 import locale
 import os # para interactuar con el sistema operativo, como manejar rutas de archivos y directorios.
 import tempfile # para trabajar con archivos temporales (creados y eliminados automáticamente).
 from django.shortcuts import render, redirect # para renderizar plantillas y 'redirect' para redirigir a otra vista.
 from django.contrib.auth import authenticate, login, logout # para autenticar, iniciar sesión y cerrar sesión de usuarios.
 
-from .models import Etiqueta # para trabajar con los datos relacionados con este modelo.
+from .models import CargarArchivo, Etiqueta # para trabajar con los datos relacionados con este modelo.
 from django.db import models # para crear y gestionar modelos de base de datos en Django.
 from .models import Etiqueta, Usuario, RolUser # para trabajar con los modelos de la aplicación.
 
@@ -31,7 +32,17 @@ from django.contrib.auth import update_session_auth_hash # para mantener la sesi
 
 from django.contrib.auth.hashers import make_password
 
+from django.core.files.storage import default_storage # para manejar el almacenamiento de archivos, como subir y guardar archivos en el sistema de archivos del servidor.
+
+from unidecode import unidecode
+
+
 from django.db.models import Sum
+
+from django.core.files.storage import FileSystemStorage
+from django.conf import settings
+
+
 #-------------------------------------------------------------Página de Etiquetas------------------------------------------------------------------
 def etiquetas(request):
     label = Etiqueta.objects.all()
@@ -461,7 +472,7 @@ def contraseña_view(request):
     return render(request, 'cambiar-contraseña.html')
 #------------------------------------------------------------Página de Usuarios--------------------------------------------------------------------
 
-from .models import Usuario, RolUser
+from .models import Usuario, RolUser, CargarArchivo, Etiqueta
 
 def usuarios_view(request):
     usuarios_django = User.objects.all()
@@ -679,3 +690,94 @@ def importar_base_de_datos(request):
 
     else:
         return render(request, 'reportes.html')
+#---------------------------------------------------------------Importar excel actualizado-----------------------------------------------------------------
+
+def cargar_archivo_view(request):
+    if request.method == 'POST':
+        archivo = request.FILES.get('archivo_excel')
+
+        # Buscar el usuario personalizado
+        try:
+            usuario_personalizado = Usuario.objects.get(email_user=request.user.email)
+        except Usuario.DoesNotExist:
+            messages.error(request, "Tu perfil no está registrado en la base de datos.")
+            return redirect('cargar_archivo')
+
+        if archivo and archivo.name.endswith('.xlsx'):
+            archivo_registrado = CargarArchivo.objects.create(
+                nombre_archivo=archivo.name,
+                id_user=usuario_personalizado
+            )
+
+            fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'archivos_excel'))
+            filename = fs.save(archivo.name, archivo)
+            archivo_path = fs.path(filename)
+
+            try:
+                df = pd.read_excel(archivo_path)
+
+                # ✅ Limpieza definitiva de nombres de columnas
+                df.columns = [
+                    unidecode(col).strip().lower().replace(" ", "").replace("-", "")
+                    for col in df.columns
+                ]
+
+                print("✅ Columnas limpias y normalizadas:", df.columns.tolist())
+
+                columnas_obligatorias = [
+                    'diaproceso', 'codigobarra', 'lote', 'area', 'destinoproducto',
+                    'totalkilos', 'totalbandejas', 'horaproceso', 'horaintervalo',
+                    'turno', 'mesproceso'
+                ]
+
+                faltantes = [col for col in columnas_obligatorias if col not in df.columns]
+                if faltantes:
+                    messages.error(request, f"❌ Columnas faltantes en el Excel: {', '.join(faltantes)}")
+                    print("❌ Columnas faltantes:", faltantes)
+                    return redirect('cargar_archivo')
+
+                # ✅ Inserción segura
+                for _, row in df.iterrows():
+                    try:
+                        
+                        # Verifica si ya existe ese código de barra
+                        if Etiqueta.objects.filter(CodigoBarra=str(row['codigobarra'])).exists():
+                            print(f"⚠️ Código ya existente, se omite: {row['codigobarra']}")
+                            continue
+                        
+                        Etiqueta.objects.create(
+                            DiaProceso=pd.to_datetime(row['diaproceso']).date(),
+                            CodigoBarra=str(row['codigobarra']),
+                            Lote=str(row['lote']),
+                            Area=str(row['area']),
+                            DestinoProducto=str(row['destinoproducto']),
+                            TotalKilos=float(row['totalkilos']),
+                            TotalBandejas=int(row['totalbandejas']),
+                            Corte=str(row.get('corte', '')),
+                            Calidad=str(row.get('calidad', '')),
+                            Conservacion=str(row.get('conservacion', '')),
+                            HoraProceso=pd.to_datetime(row['horaproceso']).time(),
+                            HoraIntervalo=str(row['horaintervalo']),
+                            Turno=str(row['turno']),
+                            MesProceso=str(row['mesproceso']),
+                            FechaProduccion=pd.to_datetime(row.get('fechaproduccion')).date()
+                                if pd.notnull(row.get('fechaproduccion')) else None,
+                            DiaProceso2=pd.to_datetime(row.get('diaproceso2')).date()
+                                if pd.notnull(row.get('diaproceso2')) else None,
+                            archivo_origen=archivo_registrado
+                        )
+                    except Exception as fila_error:
+                        print(f"❌ Error al insertar fila: {fila_error}")
+                        continue
+
+                messages.success(request, "Archivo cargado y datos procesados exitosamente.")
+            except Exception as e:
+                print("❌ ERROR AL PROCESAR:", e)
+                messages.error(request, f"No se pudo procesar el archivo: {str(e)}")
+                return redirect('cargar_archivo')
+        else:
+            messages.error(request, "Formato no válido. Solo se permiten archivos .xlsx.")
+        return redirect('cargar_archivo')
+
+    archivos = CargarArchivo.objects.order_by('-fecha_subida')[:10]
+    return render(request, 'cargar_archivo.html', {'archivos': archivos})

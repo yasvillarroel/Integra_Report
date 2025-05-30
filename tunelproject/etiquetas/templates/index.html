@@ -2,7 +2,36 @@
 {% load static %}
 {% block content %}
 {% comment %} index.html : Página de inicio {% endcomment %}
-<div class="contenedor">
+<div class="container-xl">
+  <div class="row g-3 p-3">
+    <!-- Producción Hoy -->
+    <div class="custom-card-width" style="display: flex;">
+            <div class="card shadow-sm" style=" width: 100%; display: flex; flex-direction: column; height: 150px;">
+        <div class="card-header text-white bg-success">
+          <h5 class="mb-0">📦 Producción Hoy</h5>
+        </div>
+        <div class="card-body text-center">
+          <h3 class="display-6">{{ total_hoy|floatformat:2 }} kg</h3>
+          <p class="text-muted">Total producido el {{ hoy|date:"d/m/Y" }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Producción Semana -->
+    <div class="custom-card-width" style="display: flex;">
+            <div class="card shadow-sm" style=" width: 100%; display: flex; flex-direction: column; height: 150px;">
+        <div class="card-header text-white bg-warning">
+          <h5 class="mb-0">📈 Producción de la Semana</h5>
+        </div>
+        <div class="card-body text-center">
+          <h3 class="display-6">{{ total_semana|floatformat:2 }} kg</h3>
+          <p class="text-muted">Del {{ inicio_semana|date:"d/m/Y" }} al {{ fin_semana|date:"d/m/Y" }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-xl">
     <div class="row g-3 p-3">
         <!-- Card Calendario -->
         <div class="custom-card-width" style="display: flex;">
@@ -29,6 +58,7 @@
             </div>
         </div>
     </div>
+    
 </div>
 
 <script>

@@ -1,4 +1,4 @@
-from datetime import datetime # para trabajar con fechas y horas.
+from datetime import date, datetime, timedelta # para trabajar con fechas y horas.
 from io import BytesIO # para manejar datos binarios en memoria como si fueran un archivo.
 from django.utils import timezone # para trabajar con zonas horarias y obtener la hora actual.
 import locale
@@ -85,6 +85,20 @@ def index(request):
     destinos = [dato['DestinoProducto'] for dato in datos_produccion_mensual]
     total_kilos = [float(dato['total_kilos']) for dato in datos_produccion_mensual]  # Asegúrate de que sean números
     
+    # 3. Total del día
+    hoy = date.today()
+    total_hoy = Etiqueta.objects.filter(DiaProceso=hoy).aggregate(suma=Sum('TotalKilos'))['suma'] or 0
+    hoy = date.today()
+    inicio_semana = hoy - timedelta(days=hoy.weekday())  # Lunes
+    fin_semana = inicio_semana + timedelta(days=6)       # Domingo
+    
+    # 3. Total de la semana
+    total_semana = (
+    Etiqueta.objects
+    .filter(DiaProceso__range=(inicio_semana, fin_semana))
+    .aggregate(suma=Sum('TotalKilos'))['suma'] or 0
+)
+    
     # Depuración en consola del servidor
     print("Mes actual:", nombre_mes)
     print("Destinos:", destinos)
@@ -93,7 +107,12 @@ def index(request):
     return render(request, 'index.html', {
         'destinos': destinos,
         'total_kilos': total_kilos,
-        'mes': nombre_mes  # Pasamos el nombre del mes a la plantilla
+        'mes': nombre_mes,  # Pasamos el nombre del mes a la plantilla
+        'total_hoy': total_hoy,
+        'hoy': hoy,
+        'total_semana': total_semana,
+        'inicio_semana': inicio_semana,
+        'fin_semana': fin_semana
     })
 #----------------------------------------------------------------Página de Reportes-----------------------------------------------------------------
 def reportes_view(request):

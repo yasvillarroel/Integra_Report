@@ -24,9 +24,17 @@
 
         <form method="POST">
             {% csrf_token %}
-            <div class="input-group">
+            <div class="input-group mb-2">
                 <span class="input-group-text"><i class="bi bi-person"></i></span>
-                <input type="text" name="username" class="form-control" value="{{ request.user.username }}" readonly>
+                <input type="text" name="nombre" class="form-control" value="{{ perfil.nombre_user }}" readonly>
+            </div>
+            <div class="input-group mb-2">
+                <span class="input-group-text"><i class="bi bi-person-lines-fill"></i></span>
+                <input type="text" name="apellido" class="form-control" value="{{ perfil.apellido_user }}" readonly>
+            </div>
+            <div class="input-group mb-2">
+                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                <input type="email" name="email" class="form-control" value="{{ perfil.email_user }}" readonly>
             </div>
             <div class="d-flex justify-content-around mt-3">
                 <button type="button" id="editBtn" class="btn-editar">Editar</button>
@@ -38,8 +46,8 @@
 
 <script>
     document.getElementById('editBtn').addEventListener('click', function() {
-        let input = document.querySelector('input[name="username"]');
-        input.removeAttribute('readonly');
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => input.removeAttribute('readonly'));
         document.getElementById('saveBtn').removeAttribute('disabled');
     });
 </script>

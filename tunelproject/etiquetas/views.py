@@ -439,19 +439,33 @@ def export_to_pdf(request):
 #---------------------------------------------------------------Página de Perfil------------------------------------------------------------------
 @login_required
 def perfil_view(request):
+    # Obtener el perfil personalizado del usuario autenticado
+    try:
+        perfil = Usuario.objects.get(email_user=request.user.email)
+    except Usuario.DoesNotExist:
+        messages.error(request, "No se encontró el perfil asociado.")
+        return render(request, 'perfil.html')
+
     if request.method == 'POST':
-        new_username = request.POST.get('username')
-        # Verifica si el nombre de usuario no está vacío y no es el mismo que el actual
-        if new_username and new_username != request.user.username:
-            # Actualiza el nombre de usuario
-            request.user.username = new_username
+        nombre = request.POST.get('nombre')
+        apellido = request.POST.get('apellido')
+        email = request.POST.get('email')
+
+        if nombre and apellido and email:
+            request.user.email = email
             request.user.save()
-            messages.success(request, 'Nombre de usuario actualizado exitosamente')
-            return redirect('perfil')  # Redirige a la página de perfil
+
+            perfil.nombre_user = nombre
+            perfil.apellido_user = apellido
+            perfil.email_user = email
+            perfil.save()
+
+            messages.success(request, "Perfil actualizado correctamente.")
+            return redirect('perfil')
         else:
-            messages.error(request, 'Por favor, ingresa un nombre de usuario válido')
-            
-    return render(request, 'perfil.html')
+            messages.error(request, "Todos los campos son obligatorios.")
+
+    return render(request, 'perfil.html', {'perfil': perfil})
 #------------------------------------------------------------Página de Cambiar Contraseña------------------------------------------------------------
 @login_required
 def contraseña_view(request):

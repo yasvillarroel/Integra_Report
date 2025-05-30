@@ -53,7 +53,7 @@
             <tbody>
                 {% for u in usuarios %}
                 <tr>
-                    <td style="font-weight: bold">{{ u.django.username }}</td>
+                    <td style="font-weight: bold">{{ u.django.username}} {{ u.perfil.apellido_user }}</td>
                     <td>
                         {% if u.perfil %}
                             <span class="badge bg-primary">{{ u.perfil.id_rol.nom_rol }}</span>

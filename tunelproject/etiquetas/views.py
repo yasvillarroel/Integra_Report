@@ -765,7 +765,7 @@ def cargar_archivo_view(request):
 
                 faltantes = [col for col in columnas_obligatorias if col not in df.columns]
                 if faltantes:
-                    messages.error(request, f"❌ Columnas faltantes en el Excel: {', '.join(faltantes)}")
+                    messages.error(request, f"❌ ERROR ❌ No se pudo importar el archivo. Columnas faltantes en el Excel: {', '.join(faltantes)}")
                     print("❌ Columnas faltantes:", faltantes)
                     return redirect('cargar_archivo')
 

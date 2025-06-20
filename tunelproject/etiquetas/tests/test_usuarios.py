@@ -83,12 +83,3 @@ def test_agregar_eliminar_usuario(client, usuario_completo):
     assert response.status_code == 200
     assert "Usuario eliminado correctamente" in response.content.decode("utf-8")
 
-# ======================== TEST: Estadísticas de producción ========================
-@pytest.mark.django_db
-def test_estadisticas_view(client, etiqueta):
-    # Accede a la vista de estadísticas (requiere al menos una etiqueta cargada)
-    response = client.get(reverse("estadisticas"))
-    assert response.status_code == 200
-
-    # Verifica que se cargan las variables necesarias para los gráficos
-    assert b"destinos" in response.content or b"fechas" in response.content

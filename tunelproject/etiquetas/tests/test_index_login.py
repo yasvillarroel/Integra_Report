@@ -10,18 +10,26 @@ from django.urls import reverse
 
 
 # ======================== TEST: Vista principal ========================
-@pytest.mark.django_db  # Indica que esta prueba necesita acceso a la base de datos
-def test_index_view(client, etiqueta):
-    # Simula una petición GET a la vista "index"
+
+@pytest.mark.django_db
+def test_index_view(client, usuario_completo, etiqueta):
+    # usuario_completo es un fixture que devuelve (user_django, user_personal)
+    user, _ = usuario_completo
+
+    # Autenticación del usuario
+    client.login(username="adminuser", password="adminpass")
+
+    # Petición a la vista index
     response = client.get(reverse("index"))
+    content = response.content.decode("utf-8")
 
-    # Verifica que la respuesta fue exitosa (HTTP 200)
+    # Validaciones
     assert response.status_code == 200
-
-    # Verifica que el contenido de la página incluya la palabra "Total"
-    # (por ejemplo, totales diarios o semanales que la vista muestra)
-    assert b"Total" in response.content
-
+    assert "Sistema de Reportabilidad de Túnel Continuo" in content
+    assert "Producción Hoy" in content
+    assert "Producción de la Semana" in content
+    assert "Calendario" in content
+    assert "Producción Mensual" in content
 
 # ======================== TEST: Login exitoso ========================
 @pytest.mark.django_db

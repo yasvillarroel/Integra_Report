@@ -27,3 +27,22 @@ def etiqueta(db):
         FechaProduccion=date.today(),
         DiaProceso2=date.today()
     )
+
+
+# etiquetas/tests/conftest.py
+import pytest
+from django.contrib.auth.models import User
+from etiquetas.models import Usuario, RolUser
+
+@pytest.fixture
+def usuario_completo(db):
+    rol = RolUser.objects.create(id_rol=21, nom_rol="admin")
+    user_django = User.objects.create_user(username="adminuser", password="adminpass", email="admin@test.com")
+    user_personal = Usuario.objects.create(
+        nombre_user="adminuser",
+        apellido_user="Tester",
+        email_user="admin@test.com",
+        pass_user="adminpass",
+        id_rol=rol
+    )
+    return user_django, user_personal

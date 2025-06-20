@@ -8,7 +8,7 @@ class RolUser(models.Model):
 
     class Meta:
         db_table = 'rol_user'
-        managed = True
+        managed = False
 
     def __str__(self):
         return self.nom_rol
@@ -23,7 +23,7 @@ class Usuario(models.Model):
 
     class Meta:
         db_table = 'usuarios'
-        managed = True
+        managed = False
 
     
 class CargarArchivo(models.Model):
@@ -34,7 +34,7 @@ class CargarArchivo(models.Model):
 
     class Meta:
         db_table = 'cargar_archivo'
-        managed = True
+        managed = False
 
     
 class Etiqueta(models.Model):
@@ -66,7 +66,7 @@ class Etiqueta(models.Model):
 
     class Meta:
         db_table = 'etiquetas_tunel'
-        managed = True
+        managed = False
 
     def __str__(self):
         return f"{self.DiaProceso} - {self.CodigoBarra}"

@@ -14,17 +14,21 @@ from io import BytesIO
 def test_reportes_view_filtrado(client, etiqueta):
     url = reverse("reportes")  # Obtiene la URL de la vista "reportes"
     response = client.get(url, {
-        "lote": "L01",         # Aplica filtro por lote
-        "area": "Área 1"       # Aplica filtro por área
+        "lote": "12556",         # Aplica filtro por lote
+        "area": "Linea 1 Noche",       # Aplica filtro por área
+        "turno": "Dia",
+        "fecha": "2025-01-24", 
+        "mes_proceso": "1", 
+        "calidad": "INDUSTRIAL A"
     })
     assert response.status_code == 200         # Verifica que la respuesta fue exitosa
-    assert b"L01" in response.content          # Confirma que el lote filtrado aparece en el HTML
+    assert b"12556" in response.content          # Confirma que el lote filtrado aparece en el HTML
 
 # ======================== TEST: Exportación a Excel ========================
 @pytest.mark.django_db
 def test_export_to_excel(client, etiqueta):
     url = reverse("export_to_excel")  # Obtiene la URL de la vista que exporta Excel
-    response = client.get(url, {"lote": "L01"})  # Simula GET con filtro por lote
+    response = client.get(url, {"lote": "12556"})  # Simula GET con filtro por lote
 
     assert response.status_code == 200
     assert response["Content-Type"] == "application/vnd.ms-excel"  # Verifica que se devuelve un archivo Excel
@@ -39,7 +43,7 @@ def test_export_to_excel(client, etiqueta):
 @pytest.mark.django_db
 def test_export_to_pdf(client, etiqueta):
     url = reverse("export_to_pdf")  # Obtiene la URL de la vista que exporta PDF
-    response = client.get(url, {"lote": "L01"})  # Simula GET con filtro por lote
+    response = client.get(url, {"lote": "12556"})  # Simula GET con filtro por lote
 
     assert response.status_code == 200
     assert response["Content-Type"] == "application/pdf"  # Verifica que se devuelve un archivo PDF

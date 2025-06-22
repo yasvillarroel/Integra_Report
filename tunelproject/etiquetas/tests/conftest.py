@@ -28,7 +28,6 @@ def etiqueta(db):
         DiaProceso2=date.today()
     )
 
-
 # etiquetas/tests/conftest.py
 import pytest
 from django.contrib.auth.models import User

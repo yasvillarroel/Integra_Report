@@ -161,7 +161,6 @@ def reportes_view(request):
     if mes_proceso:
         etiquetas = etiquetas.filter(MesProceso=mes_proceso)
         
-        
      # Calcular los totales
     total_kilos = round(etiquetas.aggregate(total_kilos=models.Sum('TotalKilos'))['total_kilos'] or 0, 2)
     total_bandejas = etiquetas.aggregate(total_bandejas=models.Sum('TotalBandejas'))['total_bandejas'] or 0
@@ -298,8 +297,8 @@ def export_to_excel(request):
             try:
                 if len(str(cell.value)) > max_length:
                     max_length = len(str(cell.value))
-            except:
-                pass
+            except Exception as e:
+                print(f"Error al calcular ancho de columna: {e}")
         adjusted_width = (max_length + 2)
         sheet.column_dimensions[column_letter].width = adjusted_width
 
@@ -372,8 +371,8 @@ def export_to_pdf(request):
     data = query.values()
     
     # Encabezados de la tabla con el orden solicitado
-    headers = ["Día Proceso", "Código de Barra", "Lote", "Área", "Destino Producto", "Total Kilos", "Total Bandejas", "Corte", "Calidad", "Conservación", "Hora Proceso", "Hora Intervalo", "Turno", "Mes Proceso"]
-
+    headers = ["Día Proceso", "Código de Barra", "Lote", "Área", "Destino Producto", "Total Kilos", "Total Bandejas", 
+               "Corte", "Calidad", "Conservación", "Hora Proceso", "Hora Intervalo", "Turno", "Mes Proceso"]
     # Formatear la columna 'DiaProceso' para mostrar solo la fecha en formato DD-MM-AAAA
     table_data = [headers]
     for item in data:
@@ -400,7 +399,6 @@ def export_to_pdf(request):
             item["Turno"],
             item["MesProceso"]
         ])
-        
     # Calcular los totales solo una vez, después de procesar todas las filas
     total_kilos = round(query.aggregate(total_kilos=models.Sum('TotalKilos'))['total_kilos'] or 0, 2)
     total_bandejas = query.aggregate(total_bandejas=models.Sum('TotalBandejas'))['total_bandejas'] or 0
@@ -420,7 +418,6 @@ def export_to_pdf(request):
 
     # Crear el título
     title = Paragraph("Reporte de Producción Tunel Continuo", title_style)
-
         
     custom_size = (16 * inch, 13 * inch)  # Multiplicamos por inch para obtener el tamaño en pulgadas
         
@@ -515,7 +512,7 @@ def usuarios_view(request):
     lista_usuarios = []
 
     for user in usuarios_django:
-        perfil = usuarios_custom.filter(email_user=user.email).first()  # ✅ relación confiable por email
+        perfil = usuarios_custom.filter(email_user=user.email).first() 
         lista_usuarios.append({
             'django': user,
             'perfil': perfil

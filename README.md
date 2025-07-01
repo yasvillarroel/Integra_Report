@@ -24,27 +24,27 @@ Este proyecto es un sistema web desarrollado como parte de un proyecto académic
 
 1. Asegúrate de tener Python 3 y pip instalados.
 2. Clona este repositorio:
-   ```bash
-   git clone https://github.com/tu-usuario/integra-report.git
-   cd integra-report
-   ```
+  ```bash
+  git clone https://github.com/tu-usuario/integra-report.git
+  cd integra-report
+  ```
 3. Instala las dependencias requeridas:
   ```bash
   pip install -r requirements.txt
   ```
 4. Configura la base de datos MySQL en el archivo settings.py:
-```bash
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'nombre_de_tu_base_de_datos',
-        'USER': 'tu_usuario',
-        'PASSWORD': 'tu_contraseña',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
-}
-```
+   ```bash
+   DATABASES = {
+       'default': {
+           'ENGINE': 'django.db.backends.mysql',
+           'NAME': 'nombre_de_tu_base_de_datos',
+           'USER': 'tu_usuario',
+           'PASSWORD': 'tu_contraseña',
+           'HOST': 'localhost',
+           'PORT': '3306',
+       }
+   }
+   ```
 5. Aplica las migraciones:
    ```bash
    python manage.py makemigrations

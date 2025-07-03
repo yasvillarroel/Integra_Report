@@ -53,14 +53,25 @@
             <tbody>
                 {% for u in usuarios %}
                 <tr>
-                    <td style="font-weight: bold">{{ u.django.username}}</td>
-                    <td>
+                    <td style="font-weight: bold">
                         {% if u.perfil %}
+                            {{ u.perfil.nombre_user }} {{ u.perfil.apellido_user }}
+                        {% else %}
+                            {{ u.django.username }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if u.perfil and u.perfil.id_rol.nom_rol|lower == 'superusuario' %}
+                            <span class="badge bg-danger">{{ u.perfil.id_rol.nom_rol }}</span>
+                        {% elif u.perfil and u.perfil.id_rol.nom_rol|lower == 'admin' %}
+                            <span class="badge bg-danger">{{ u.perfil.id_rol.nom_rol }}</span>
+                        {% elif u.perfil %}
                             <span class="badge bg-primary">{{ u.perfil.id_rol.nom_rol }}</span>
                         {% else %}
                             <span class="badge bg-secondary">Sin rol</span>
                         {% endif %}
                     </td>
+
                     <td>
                         <div class="d-flex justify-content-center container">
                             <div class="col-auto">
